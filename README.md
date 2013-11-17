@@ -8,5 +8,10 @@ AirTunes player aimed to play music files which are directly supported by Airpor
 See the following blog for some more information on how the resource can be kept low.
 http://erikonbike.blogspot.nl
 
+This command line player uses only very basic C libs. The only exception is the pthreads lib.
+A MD5 module from Solar Designer <solar at openwall.com> is the only external code in use. See http://openwall.info/wiki/people/solar/software/public-domain-source-code/md5
+
+All code is written by me, but some ideas have been taken from other sources like JustePort and forked-daapd. The streaming of audio to the AirPort Express without using RSA encryption for authentication, seems new. I have not found other players doing this. It will probably work on AirPlay as well (a first test shows positive results).
+
 Have fun.
 Erik
