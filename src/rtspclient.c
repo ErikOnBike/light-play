@@ -51,6 +51,7 @@ struct RTSPClientStruct {
 	/* Network connection and url */
 	NetworkConnection *networkConnection;
 	char *url;
+	char *password;
 
 	/* Request and response buffers */
 	RTSPRequest *rtspRequest;
@@ -101,7 +102,7 @@ static const HeaderFieldsSupplier headerFieldsSupplierTable[] = {
 	{ 0, NULL }
 };
 
-RTSPClient *rtspClientOpenConnection(const char *hostName, const char *portName) {
+RTSPClient *rtspClientOpenConnection(const char *hostName, const char *portName, const char *password) {
 	RTSPClient *rtspClient;
 
 	/* Create RTSP client structure */
@@ -130,6 +131,13 @@ RTSPClient *rtspClientOpenConnection(const char *hostName, const char *portName)
 	}
 	strncat(rtspClient->url, "/1", MAX_URL_STRING_SIZE - strlen(rtspClient->url) - 1);
 	/* TODO: check if fixed session id "1" is valid in all cases */
+
+	/* Copy password */
+	if(password != NULL) {
+		rtspClient->password = strdup(password);
+	} else {
+		rtspClient->password = NULL;
+	}
 
 	/* Initialize session information */
 	rtspClient->sessionId = 0;
@@ -166,6 +174,12 @@ bool rtspClientSendCommand(RTSPClient *rtspClient, RTSPRequestMethod requestMeth
 	/* Repeat request/response if authentication is required */
 	if(rtspClient->needAuthentication) {
 		
+		/* If no password is present, fail */
+		if(rtspClient->password == NULL) {
+			logWrite(LOG_LEVEL_ERROR, LOG_COMPONENT_NAME, "No password specified, but a password is required.");
+			return false;
+		}
+
 		/* Send request */
 		if(!rtspClientSendRequest(rtspClient, requestMethod, raopClient, raopClientContentSupplier)) {
 			return false;
@@ -173,6 +187,12 @@ bool rtspClientSendCommand(RTSPClient *rtspClient, RTSPRequestMethod requestMeth
 
 		/* Receive response (check returned status code) */
 		if(!rtspClientReceiveResponse(rtspClient)) {
+			return false;
+		}
+
+		/* Still need authentication? */
+		if(rtspClient->needAuthentication) {
+			logWrite(LOG_LEVEL_ERROR, LOG_COMPONENT_NAME, "Invalid password specified.");
 			return false;
 		}
 
@@ -269,7 +289,7 @@ bool rtspClientAddAuthenticationFields(RTSPClient *rtspClient) {
 	MD5_Update(&md5Context, ":", 1);
 	MD5_Update(&md5Context, rtspClient->realm, rtspClient->realmSize);
 	MD5_Update(&md5Context, ":", 1);
-	MD5_Update(&md5Context, "geheim", 6);
+	MD5_Update(&md5Context, rtspClient->password, strlen(rtspClient->password));
 	MD5_Final(ha1, &md5Context);
 	for(index = 0; index < DIGEST_SIZE; index++) {
 		sprintf(&ha1String[index * 2], "%02X", (int)ha1[index]);
@@ -525,6 +545,9 @@ bool rtspClientCloseConnection(RTSPClient **rtspClient) {
 		}
 		if(!bufferFree(&(*rtspClient)->url)) {
 			result = false;
+		}
+		if((*rtspClient)->password != NULL) {
+			free((*rtspClient)->password);	/* Password allocated using strdup instead of bufferAllocate */
 		}
 		if(!bufferFree(rtspClient)) {
 			result = false;

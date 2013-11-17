@@ -92,7 +92,7 @@ static bool raopClientAnnounceContentSupplier(RAOPClient *raopClient, RTSPReques
 static bool raopClientSetVolumeContentSupplier(RAOPClient *raopClient, RTSPRequest *rtspRequest);
 static bool raopClientCloseConnectionInternal(RAOPClient **raopClient);
 
-RAOPClient *raopClientOpenConnection(const char *hostName, const char *portName) {
+RAOPClient *raopClientOpenConnection(const char *hostName, const char *portName, const char *password) {
 	RAOPClient *raopClient;
 
 	/* Create raop client structure */
@@ -114,7 +114,7 @@ RAOPClient *raopClientOpenConnection(const char *hostName, const char *portName)
 	raopClient->volume = VOLUME_DEFAULT;	/* Set volume separately (not in 'raopClientInitialize'), so it retains it value between different calls to 'raopClientPlayM4AFile'. */
 
 	/* Open the RTSP connection */
-	raopClient->rtspClient = rtspClientOpenConnection(hostName, portName);
+	raopClient->rtspClient = rtspClientOpenConnection(hostName, portName, password);
 	if(raopClient->rtspClient == NULL) {
 		raopClientCloseConnection(&raopClient);
 		return NULL;

@@ -33,12 +33,13 @@ typedef struct RAOPClientStruct RAOPClient;
  * Parameters:
  *	hostName - name of host
  *	portName - name of port
+ *      password - password (optional)
  * Returns: RAOP Client structure
  *
  * Remarks:
  * The portName parameter can either be the string representation of a port number but can also be a service name like "raop" or "rtsp" (if your system supports this).
  */
-RAOPClient *raopClientOpenConnection(const char *hostName, const char *portName);
+RAOPClient *raopClientOpenConnection(const char *hostName, const char *portName, const char *password);
 
 /*
  * Function: raopClientSetAudioPort

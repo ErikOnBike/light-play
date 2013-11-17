@@ -36,12 +36,13 @@ typedef struct RTSPClientStruct RTSPClient;
  * Parameters:
  *	hostName - name of host
  *	portName - name of port
+ *      password - password (optional)
  * Returns: RTSP client structure.
  *
  * Remarks:
  * The portName parameter can either be the string representation of a port number but can also be a service name like "ftp" or "telnet".
  */
-RTSPClient *rtspClientOpenConnection(const char *hostName, const char *portName);
+RTSPClient *rtspClientOpenConnection(const char *hostName, const char *portName, const char *password);
 
 /*
  * Function: rtspClientSendCommand

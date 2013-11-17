@@ -22,6 +22,7 @@ static void signalHandler(int signalNumber);
 int main(int argc, char** argv) {
 	M4AFile *m4aFile;
 	char *url;
+	char *password;
 	char *portName;
 	char *fileName;
 	LogLevel logLevel;
@@ -34,6 +35,7 @@ int main(int argc, char** argv) {
 	logSetLogLevel(LOG_LEVEL_WARNING);
 	logSetFile(stderr);
 	url = NULL;
+	password = NULL;
 	portName = "5000";
 	fileName = NULL;
 	logLevel = LOG_LEVEL_WARNING;
@@ -52,6 +54,20 @@ int main(int argc, char** argv) {
 					/* Help on usage */
 					printUsage(argv[0], NULL);
 				return 1;
+				case 'c':
+					/* Set password */
+					if(argv[i][2] == '\0') {
+						if(i + 1 < argc) {
+							i++;
+							password = argv[i];
+						} else {
+							printUsage(argv[0], "Parameter value for 'c' not specified.");
+							return 1;
+						}
+					} else {
+						password = &argv[i][2];
+					}
+				break;
 				case 'p':
 					/* Set port (default: 5000) */
 					if(argv[i][2] == '\0') {
@@ -185,7 +201,7 @@ int main(int argc, char** argv) {
 	}
 
 	/* Open RAOP client */
-	raopClient = raopClientOpenConnection(url, portName);
+	raopClient = raopClientOpenConnection(url, portName, password);
 	if(raopClient == NULL) {
 		m4aFileClose(&m4aFile);
 		return 1;
@@ -240,6 +256,7 @@ void printUsage(const char *appName, const char *printFormat, ...) {
 	/* Print usage */
 	fprintf(stderr, "Usage: %s [-?hpvqlo] <url> <filename>\n\n" \
 			"    -? | -h          Print this usage message\n" \
+			"    -c[ ]<password>  Set password for using AirPort express\n" \
 			"    -p[ ]<portname>  Set name/number of AirTunes port (default: 5000)\n"
 			"    -v[e|w|i|d]      Set logging verbosity (default: w)\n"
 			"                         e: only errors\n"
