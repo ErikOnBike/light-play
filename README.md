@@ -12,8 +12,8 @@ Because of the resource friendly nature, it is suited well for small devices lik
 How to use it
 -------------
 Light-play is a command line tool. The following command line arguments are valid:
-	Usage: light-play [-?hcpvlo] <url> <filename>
-
+	    Usage: light-play [-?hcpvlo] <url> <filename>
+	    
 	    -? | -h          Print this usage message
 	    -c[ ]<password>  Set password for using AirPort Express
 	    -p[ ]<portname>  Set name/number of AirTunes port (default: 5000)
@@ -51,4 +51,4 @@ The philosophy behind light-play is that it is light because no encoding/transco
 
 More info
 ---------
-Some more info might be found at ErikOnBike.blogspot.nl
+Some more info might be found at http://ErikOnBike.blogspot.nl
