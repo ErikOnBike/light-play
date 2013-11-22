@@ -254,9 +254,9 @@ void printUsage(const char *appName, const char *printFormat, ...) {
 	}
 
 	/* Print usage */
-	fprintf(stderr, "Usage: %s [-?hpvqlo] <url> <filename>\n\n" \
+	fprintf(stderr, "Usage: %s [-?hcpvlo] <url> <filename>\n\n" \
 			"    -? | -h          Print this usage message\n" \
-			"    -c[ ]<password>  Set password for using AirPort express\n" \
+			"    -c[ ]<password>  Set password for using AirPort Express\n" \
 			"    -p[ ]<portname>  Set name/number of AirTunes port (default: 5000)\n"
 			"    -v[e|w|i|d]      Set logging verbosity (default: w)\n"
 			"                         e: only errors\n"

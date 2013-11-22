@@ -42,7 +42,7 @@
 #define	MAX_HEXNUMBER_STRING_SIZE	9
 
 /* Relevant RTSP Response values */
-#define RTSP_RESPONSE_LOW_BANDWIDTH		354
+#define RTSP_RESPONSE_LOW_BANDWIDTH		453
 #define RTSP_RESPONSE_NEED_AUTHENTICATION	401
 
 /* Type definition for the RTSP client */
@@ -512,7 +512,7 @@ bool rtspClientReceiveResponse(RTSPClient *rtspClient) {
 			logWrite(LOG_LEVEL_WARNING, LOG_COMPONENT_NAME, "RTSP Response received return code %" SCNi16 ". This is a 'success' response, but might indicate a warning on the server.", int16Value);
 		} else {
 			if(int16Value != RTSP_RESPONSE_NEED_AUTHENTICATION) {
-				logWrite(LOG_LEVEL_ERROR, LOG_COMPONENT_NAME, "RTSP Response failed with code %" SCNi16 "%s.", int16Value, int16Value == RTSP_RESPONSE_LOW_BANDWIDTH ? " AirTunes device is probably playing audio already." : "");
+				logWrite(LOG_LEVEL_ERROR, LOG_COMPONENT_NAME, "RTSP Response failed with code %" SCNi16 "%s.", int16Value, int16Value == RTSP_RESPONSE_LOW_BANDWIDTH ? ". AirTunes device is probably playing audio already." : "");
 				return false;
 			}
 			rtspClient->needAuthentication = true;
