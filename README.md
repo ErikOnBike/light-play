@@ -12,6 +12,7 @@ Because of the resource friendly nature, it is suited well for small devices lik
 How to use it
 -------------
 Light-play is a command line tool. The following command line arguments are valid:
+
 	    Usage: light-play [-?hcpvlo] <url> <filename>
 	    
 	    -? | -h          Print this usage message
