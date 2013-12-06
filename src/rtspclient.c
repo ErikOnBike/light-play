@@ -110,6 +110,10 @@ RTSPClient *rtspClientOpenConnection(const char *hostName, const char *portName,
 		return NULL;
 	}
 
+	/* Initialize request/response */
+	rtspClient->rtspRequest = NULL;
+	rtspClient->rtspResponse = NULL;
+
 	/* Open the TCP connection */
 	rtspClient->networkConnection = networkOpenConnection(hostName, portName, TCP_CONNECTION, true);
 	if(rtspClient->networkConnection == NULL) {
